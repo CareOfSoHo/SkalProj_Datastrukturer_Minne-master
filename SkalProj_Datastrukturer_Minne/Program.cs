@@ -503,6 +503,21 @@ namespace SkalProj_Datastrukturer_Minne
              */
             while (true)
             {
+                #region hårdkodat sträng
+                //hårdkodad array för tecken som ska vara korrekta
+                //
+                //char[] checkPar1 = { '(', ')', '{', '}', '[', ']' };
+
+                //if (CorrectParantheses(checkPar1))
+                //{
+                //    Console.WriteLine("Hårdkodad correct ");
+                //}
+                //else
+                //{
+                //    Console.WriteLine(" Hårdkodad incorrect");
+                //}
+                #endregion
+
                 string input = Console.ReadLine();
                 if (input == "")
                 {
@@ -511,12 +526,24 @@ namespace SkalProj_Datastrukturer_Minne
                 char nav = input[0];
                 string value = input.Substring(1);
                 StringBuilder strB = new StringBuilder(value);
-
+                Console.WriteLine("stringbuilder " + strB);
                 #region switch 
                 switch (nav)
                 {
                     case '+':
                         {
+                            char[] checkString = value.ToCharArray();
+                            //CheckPairInString(checkString);
+
+                            if (CorrectParantheses(checkString))
+                            {
+                                Console.WriteLine("Parantheses are correct ");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Parantheses are incorrect");
+                            }
+
                             break;
                         }
                     case '-':
@@ -536,6 +563,72 @@ namespace SkalProj_Datastrukturer_Minne
             }
         }
 
+        //används inte, testgrej
+        private static void CheckPairInString(char[] checkString)
+        {
+            for (int i = 0; i < checkString.Length; i++)
+            {
+                Console.WriteLine(checkString[i]);
+            }
+        }
+
+        static bool CorrectParantheses(char[] checkPar1)
+        {
+            //skapa en tom stack, som ska hålla chars av (){}[] - i rätt matchning
+            Stack<char> cString = new Stack<char>();
+
+            for (int i = 0; i < checkPar1.Length; i++)
+            {
+                //om det är en början-parantes
+                if (checkPar1[i] == '(' || checkPar1[i] == '{' || checkPar1[i] == '[')
+                {
+                    //lägg till stack
+                    cString.Push(checkPar1[i]);
+                }
+                //om det är en slut-parantes, utan matchande början parantes
+                if (checkPar1[i] == ')' || checkPar1[i] == '}' || checkPar1[i] == ']')
+                {
+                    //bara en slut parantes - incorrect
+                    if (cString.Count == 0)
+                    {
+                        return false;
+                    }
+                    //om det inte finns en början-parantes - incorrect
+                    //ta bort från stacken isf
+                    else if (!IsAMatch(cString.Pop(), checkPar1[i]))
+                    {
+                        return false;
+                    }
+                }
+            }
+            if (cString.Count == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        static bool IsAMatch(char v1, char v2)
+        {
+
+            if (v1 == '(' && v2 == ')')
+            {
+                return true;
+            }
+            else if (v1 == '{' && v2 == '}')
+            {
+                return true;
+            }
+            else if (v1 == '[' && v2 == ']')
+            {
+                return true;
+            }
+            else
+                return false;
+        }
     }
 }
 
